@@ -32,4 +32,4 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 EXPOSE 80
 
 # Jalankan migrasi otomatis saat container dijalankan
-CMD php artisan migrate --seed --force && php artisan dota:scrape-fandom && apache2-foreground
+CMD php artisan migrate --force && php artisan dota:scrape-fandom && apache2-foreground
