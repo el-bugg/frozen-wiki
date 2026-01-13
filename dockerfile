@@ -1,7 +1,7 @@
-# Menggunakan image PHP resmi dengan Apache
-FROM php:8.2-apache
+# 1. Gunakan PHP 8.4
+FROM php:8.4-apache
 
-# Instal dependensi sistem yang diperlukan
+# 2. Instal dependensi sistem
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
@@ -12,32 +12,28 @@ RUN apt-get update && apt-get install -y \
     curl \
     libsqlite3-dev
 
-# Instal ekstensi PHP
+# 3. Instal ekstensi PHP
 RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
 
-# Aktifkan Apache Rewrite Module (penting untuk routing Laravel)
+# 4. Konfigurasi Apache
 RUN a2enmod rewrite
-
-# Set Document Root Apache ke folder public Laravel
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Instal Composer
+# 5. Instal Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy semua kode aplikasi ke dalam container
+# 6. Copy File Proyek
 WORKDIR /var/www/html
 COPY . .
 
-# Jalankan instalasi composer
-RUN composer install --no-dev --optimize-autoloader
+# 7. Jalankan Instalasi dengan Paksa (Mengabaikan cek versi PHP yang ketat)
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Set izin folder (penting agar Laravel bisa menulis log/cache)
+# 8. Set Izin Folder
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Port yang digunakan oleh Render
 EXPOSE 80
 
-# Jalankan perintah start
 CMD ["apache2-foreground"]
