@@ -34,6 +34,9 @@ RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 # 8. Set Izin Folder
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Menambahkan perintah pembuatan database otomatis saat container start
+RUN touch database/database.sqlite && chmod -R 777 database
+
 EXPOSE 80
 
 CMD ["apache2-foreground"]
