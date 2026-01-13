@@ -1,0 +1,568 @@
+/* =========================================
+   1. GLOBAL SETUP & VARIABLES
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+/* Font Custom Frozen */
+@font-face {
+    font-family: "Frozen";
+    src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/209981/Ice%20kingdom%20-%20Bold%20-%20Por%20Kustren.woff");
+}
+
+:root {
+    --ice-dark: #050b14;        /* Base Background */
+    --ice-dark-glass: rgba(5, 11, 20, 0.85); /* Navbar/Cards */
+    --ice-blue: #00d9ff;        /* Primary Highlight */
+    --ice-glow: rgba(0, 217, 255, 0.6);
+    --ice-border: #466d85;      /* Border Color */
+    --text-main: #cceeff;       /* Main Text */
+    --text-muted: #88aabb;      /* Secondary Text */
+}
+
+/* =========================================
+   2. BODY & SCROLLBAR
+   ========================================= */
+body {
+    background-color: var(--ice-dark);
+    /* Background Dota Fog - Fixed Position untuk efek Parallax */
+    background-image: url('https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/backgrounds/bg_fog.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center top;
+    
+    color: var(--text-main);
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0b1116; }
+::-webkit-scrollbar-thumb { background: #2a4b5f; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ice-blue); }
+
+/* Selection Text */
+::selection {
+    background: var(--ice-blue);
+    color: #000;
+}
+
+/* =========================================
+   3. TYPOGRAPHY & EFFECTS
+   ========================================= */
+h1, h2, h3, h4, h5, .font-cinzel { 
+    font-family: 'Cinzel', serif; 
+    letter-spacing: 1px; 
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.text-ice { color: var(--ice-blue) !important; }
+.text-justify { text-align: justify; }
+
+/* Efek Teks "Frozen" (Untuk Judul Utama) */
+.frozen-text {
+    font-family: "Frozen", serif;
+    background-image: url("https://assets.codepen.io/209981/ice.jpg");
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-size: contain;
+    position: relative;
+    -webkit-text-stroke: 1px #4f90ab;
+    filter: drop-shadow(0 0 5px rgba(41, 131, 172, 0.5));
+    letter-spacing: 2px;
+}
+
+/* Efek Kilauan pada Teks Frozen */
+.frozen-text::before {
+    content: attr(data-text); 
+    position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.8) 50%, transparent 55%);
+    -webkit-background-clip: text; 
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200%; 
+    animation: shine 5s infinite; 
+    pointer-events: none;
+}
+
+@keyframes shine { 
+    0% { background-position: -120%; } 
+    20% { background-position: 120%; } 
+    100% { background-position: 120%; } 
+}
+
+/* =========================================
+   4. NAVBAR & NAVIGATION
+   ========================================= */
+.navbar-dota {
+    background-color: var(--ice-dark-glass);
+    border-bottom: 1px solid var(--ice-border);
+    padding: 15px 0;
+    transition: 0.3s;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand.frozen-text {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    padding-bottom: 5px;
+    margin-right: 2rem;
+}
+
+.nav-link { 
+    color: var(--text-muted) !important; 
+    text-transform: uppercase; 
+    font-weight: bold; 
+    letter-spacing: 2px;
+    transition: 0.3s;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.nav-link:hover, .nav-link.active { 
+    color: var(--ice-blue) !important; 
+    text-shadow: 0 0 10px var(--ice-blue); 
+}
+
+/* =========================================
+   5. COMPONENTS (Cards, Forms, Buttons)
+   ========================================= */
+
+/* --- A. Form Inputs (Login, Search, dll) --- */
+.form-control {
+    background-color: rgba(17, 17, 17, 0.8);
+    border: 1px solid #444;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-color: var(--ice-border);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+    outline: none;
+}
+.form-control::placeholder { color: #666; font-style: italic; }
+
+/* --- B. Glass Panel (Untuk Community / Login Card) --- */
+.glass-panel {
+    background: linear-gradient(135deg, rgba(11, 20, 30, 0.9), rgba(5, 10, 15, 0.95));
+    border: 1px solid var(--ice-border);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    color: var(--text-main);
+}
+
+/* --- C. Hero Holographic Card (Dashboard) --- */
+.canvas-card {
+    position: relative; width: 100%; aspect-ratio: 16/9;
+    background: #0b1116; border: 1px solid #333; overflow: hidden;
+    transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.shader-layer {
+    position: absolute; inset: 0; opacity: 0; transition: 0.5s; z-index: 2; mix-blend-mode: overlay;
+    background: linear-gradient(135deg, rgba(0,217,255,0) 30%, rgba(0,217,255,0.3) 45%, rgba(255,255,255,0.4) 50%, rgba(0,217,255,0.3) 55%, rgba(0,217,255,0) 70%);
+    background-size: 200% 200%;
+}
+
+.canvas-img-wrapper { width: 100%; height: 100%; overflow: hidden; }
+.hero-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%) contrast(1.1); transition: 0.5s; }
+.canvas-details {
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; z-index: 10;
+    background: linear-gradient(to top, black 20%, transparent 100%);
+}
+.canvas-title { color: #fff; transform: translateX(-20px); opacity: 0; transition: 0.4s; text-shadow: 0 0 5px cyan; }
+.canvas-subtitle { transform: translateY(20px); opacity: 0; transition: 0.4s 0.1s; }
+
+.canvas-card:hover { border-color: var(--ice-blue); box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); transform: translateY(-5px); z-index: 10; }
+.canvas-card:hover .shader-layer { opacity: 1; background-position: 100% 100%; }
+.canvas-card:hover .hero-img { transform: scale(1.1); filter: grayscale(0%); }
+.canvas-card:hover .canvas-title { transform: translateX(0); opacity: 1; }
+.canvas-card:hover .canvas-subtitle { transform: translateY(0); opacity: 1; }
+
+/* --- D. Item Card (Items Page) --- */
+.item-canvas { 
+    position: relative;
+    transition: 0.3s; 
+    overflow: hidden; 
+    cursor: pointer; 
+    background: #1a1a1a; 
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+.item-img { width: 100%; display: block; transition: 0.3s; }
+.holo-sheen {
+    position: absolute; inset: 0; z-index: 2; opacity: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+    background-size: 200%; transition: 0.5s; pointer-events: none;
+}
+.item-canvas:hover { 
+    transform: scale(1.1); 
+    border-color: #ffd700 !important; /* Gold border for items */
+    box-shadow: 0 0 15px rgba(255,215,0,0.4); 
+    z-index: 10; 
+}
+.item-canvas:hover .holo-sheen { opacity: 1; background-position: 100%; }
+
+/* --- E. Neon Menu Buttons (Filter) --- */
+.neon-menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0; margin-bottom: 2rem; }
+.neon-menu li {
+    position: relative; list-style: none; width: 70px; height: 70px;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; transition: 0.5s; background: rgba(11, 17, 22, 0.9); border-radius: 10px;
+    border: 1px solid #333;
+}
+.neon-menu li::before {
+    content: ''; position: absolute; inset: 0;
+    box-shadow: 0 0 0 1px var(--clr); border-radius: 10px; transition: 0.5s; opacity: 0;
+}
+.neon-menu li:hover::before, .neon-menu li.active::before {
+    inset: -2px; opacity: 1; box-shadow: 0 0 10px var(--clr), 0 0 20px var(--clr);
+}
+.neon-menu li a { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; flex-direction: column; text-decoration: none; }
+.filter-icon { width: 32px; height: 32px; transition: 0.5s; object-fit: contain; z-index: 10; filter: grayscale(100%); opacity: 0.7; }
+.neon-menu li:hover .filter-icon, .neon-menu li.active .filter-icon { transform: translateY(-8px); filter: grayscale(0%) drop-shadow(0 0 5px var(--clr)); opacity: 1; }
+.neon-menu li .text { position: absolute; bottom: 8px; font-size: 0.65em; font-weight: bold; color: var(--clr); opacity: 0; transition: 0.5s; transform: translateY(10px); }
+.neon-menu li:hover .text, .neon-menu li.active .text { opacity: 1; transform: translateY(0); }
+
+/* =========================================
+   6. PAGE SPECIFICS
+   ========================================= */
+
+/* --- Hero Detail Page (Video & Overlay) --- */
+.video-wrapper {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 100%; height: 100%; max-width: 1280px;
+    z-index: 0; opacity: 0.85; mix-blend-mode: screen; pointer-events: none;
+}
+.hero-video {
+    width: 100%; height: 100%; object-fit: contain;
+    mask-image: radial-gradient(circle, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 80%);
+}
+/* Tombol Next/Prev di Kiri Kanan */
+.hero-navigation .nav-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%); z-index: 100;
+    width: 60px; height: 80px; 
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--ice-border); backdrop-filter: blur(5px);
+    display: flex; align-items: center; justify-content: center; transition: 0.3s;
+    cursor: pointer;
+}
+.prev-arrow { left: 0; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-left: none; }
+.next-arrow { right: 0; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-right: none; }
+
+.hero-navigation .nav-arrow:hover { 
+    width: 120px; 
+    background: rgba(5, 20, 30, 0.95); 
+    border-color: var(--ice-blue); 
+    box-shadow: 0 0 15px var(--ice-glow); 
+}
+/* Konten dalam panah (hidden by default) */
+.nav-content { display: none; flex-direction: column; align-items: center; opacity: 0; transition: 0.3s; }
+.hero-navigation .nav-arrow:hover .nav-content { display: flex; opacity: 1; }
+.nav-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; border: 1px solid var(--ice-blue); }
+
+/* --- Community Page (Discussion List) --- */
+.discussion-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid #333;
+    padding: 15px;
+    transition: 0.2s;
+}
+.discussion-item:hover {
+    background: rgba(0, 217, 255, 0.05);
+    border-left: 3px solid var(--ice-blue);
+}
+
+/* =========================================
+   7. ANIMATIONS & UTILS
+   ========================================= */
+
+/* Snow Animation */
+#snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999999999; overflow: hidden; }
+.snowflake {
+    position: absolute; top: -10px; border-radius: 50%; background: white; opacity: 0.8;
+    box-shadow: 0 0 10px white; animation: fall linear infinite;
+}
+@keyframes fall {
+    0% { transform: translateY(-10vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(110vh) scale(1); opacity: 0.2; }
+}
+
+/* Mobile Responsive Fixes */
+@media (max-width: 768px) {
+    .navbar-brand.frozen-text { font-size: 1.5rem !important; }
+    h1.frozen-text { font-size: 2.5rem !important; }
+    .hero-navigation .nav-arrow { display: none; } /* Hide arrows on mobile */
+    .neon-menu li { width: 50px; height: 50px; }
+    .neon-menu li .text { display: none; }
+}
+
+
+
+
+
+
+
+/* tambahan */
+/* Tambahkan ini di bagian 5. COMPONENTS pada CSS Anda */
+.btn-ice {
+    background: rgba(5, 11, 20, 0.6);
+    border: 1px solid var(--ice-blue);
+    color: var(--ice-blue);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem; /* Tailwind rounded-md */
+}
+
+.btn-ice:hover {
+    background: var(--ice-blue);
+    color: #050b14;
+    box-shadow: 0 0 15px var(--ice-glow);
+}
+
+.btn-danger-ice {
+    background: rgba(20, 5, 5, 0.6);
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+}
+
+.btn-danger-ice:hover {
+    background: #ff4444;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+}
+
+/* Override Label Warna agar terbaca di background gelap */
+label {
+    color: var(--text-main) !important;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+:root {
+  --bg-color: #0b0c10; /* Hitam pekat */
+  --card-bg: #1f2833; /* Abu-abu gelap */
+  --accent: #66fcf1; /* Cyan Neon (Modern) atau ganti Merah Dota */
+  --text-primary: #ffffff;
+  --text-secondary: #c5c6c7;
+  --dota-red: #bc281e; 
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+}
+
+/* Container Utama */
+.main-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px; /* Sidebar - Feed - Stats */
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card Design (Glass effect) */
+.post-card, .hero-card, .guide-card {
+  background: rgba(31, 40, 51, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(102, 252, 241, 0.2); /* Efek glow halus */
+  border-color: var(--accent);
+}
+
+/* Header Postingan */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+/* Tab Navigasi Keren */
+.nav-tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #333;
+}
+
+.nav-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-item.active {
+  color: var(--accent);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Item Build Recommendation */
+.item-build-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.item-icon {
+  width: 50px;
+  height: 35px; /* Ratio item dota */
+  background: #000;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+/* Tombol Follow Dashboard */
+.stats-panel {
+  text-align: center;
+}
+.follow-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}
+.stat-box h3 { margin: 0; color: var(--accent); }
+.stat-box span { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* --- EMERGENCY FIX: FORM INPUTS & PROFILE --- */
+input, textarea, select, .form-control {
+    background-color: #0b1116 !important; /* Paksa Hitam */
+    color: #cceeff !important; /* Teks Biru Es */
+    border: 1px solid #466d85 !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    box-shadow: 0 0 10px #00d9ff !important;
+    outline: none !important;
+}
+
+/* Fix Halaman Profile yang tidak terbaca */
+.bg-white {
+    background-color: rgba(5, 11, 20, 0.9) !important; /* Timpa background putih jadi gelap */
+    color: white !important;
+}
+.text-gray-800, .text-gray-600 {
+    color: #cceeff !important; /* Ubah teks abu-abu jadi terang */
+}
+
+.video-background-wrapper {
+    z-index: 0 !important;
+}
+/* =========================================
+   CUSTOM PAGINATION (NEON STYLE)
+   ========================================= */
+.pagination {
+    --bs-pagination-bg: transparent;
+    --bs-pagination-border-color: #334e68;
+    --bs-pagination-hover-bg: rgba(0, 217, 255, 0.1);
+    --bs-pagination-hover-border-color: #00d9ff;
+    --bs-pagination-focus-bg: rgba(0, 217, 255, 0.1);
+}
+
+.page-link {
+    background-color: #050b14 !important; /* Latar belakang gelap */
+    border-color: #334e68 !important;     /* Border biru pudar */
+    color: #00d9ff !important;            /* Teks Neon */
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background-color: rgba(0, 217, 255, 0.15) !important;
+    border-color: #00d9ff !important;
+    color: #fff !important;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+    z-index: 2;
+}
+
+.page-item.active .page-link {
+    background-color: #00d9ff !important;
+    border-color: #00d9ff !important;
+    color: #000 !important;               /* Teks hitam agar kontras */
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.5); /* Glow effect */
+}
+
+.page-item.disabled .page-link {
+    background-color: #0b1116 !important;
+    border-color: #2d3748 !important;
+    color: #4a5568 !important;
+    opacity: 0.6;
+}
